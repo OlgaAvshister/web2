@@ -9,6 +9,8 @@ import servlet.simple_servlet.model.ResultModel;
 import servlet.simple_servlet.model.ResultsBean;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * The type Spec room servlet.
@@ -27,10 +29,11 @@ public final class AreaCheckServlet extends HttpServlet {
         float r = Float.parseFloat((String) request.getAttribute("R"));
         float x = Float.parseFloat((String) request.getAttribute("X"));
         float y = Float.parseFloat((String) request.getAttribute("Y"));
+        LocalDateTime time = LocalDateTime.now();
 
         boolean fallsIntoArea = fallsIntoArea(x, y, r);
-
-        ResultModel resultModel = new ResultModel(x, y, r, fallsIntoArea);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
+        ResultModel resultModel = new ResultModel(x, y, r, fallsIntoArea, time.format(formatter));
         ResultsBean resultsBean = (ResultsBean) request.getAttribute("resultsBean");
         resultsBean.setResultToList(resultModel);
         request.setAttribute("resultModel", resultModel);
@@ -41,8 +44,8 @@ public final class AreaCheckServlet extends HttpServlet {
     private boolean fallsIntoArea(float x, float y, float r) {
         boolean fitsIntoFirst = y >= 0 && x >= 0 && y <= r/2 - x;
         boolean fitsIntoSecond = x <= 0 && y >= 0 && x >= -r/2 && y <= r;
-        boolean fitsIntoFourth = y <= 0 && x <= 0 && Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= r;
+        boolean fitsIntoThird = y <= 0 && x <= 0 && Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= r;
 
-        return fitsIntoFirst || fitsIntoSecond || fitsIntoFourth;
+        return fitsIntoFirst || fitsIntoSecond || fitsIntoThird;
     }
 }

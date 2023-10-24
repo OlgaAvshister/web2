@@ -23,23 +23,6 @@ public final class ControllerServlet extends HttpServlet {
         this.resultsBean = new ResultsBean();
     }
 
-/*    @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
-            throws IOException, ServletException {
-        request.setAttribute("resultsBean", resultsBean);
-        String path;
-
-        if (request.getParameter("r") == null) {
-            path = "/resources/form.jsp";
-        } else {
-            request.setAttribute("R", request.getParameter("r"));
-            request.setAttribute("X", request.getParameter("x"));
-            request.setAttribute("Y", request.getParameter("y"));
-            path = "/checkArea";
-        }
-        getServletContext().getRequestDispatcher(path).forward(request, response);
-    }*/
-
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws IOException, ServletException {
         if(request.getParameter("r") != null){

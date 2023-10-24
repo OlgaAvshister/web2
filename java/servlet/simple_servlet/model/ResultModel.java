@@ -1,16 +1,22 @@
 package servlet.simple_servlet.model;
 
+import java.text.Format;
+import java.time.LocalDateTime;
+
 public class ResultModel {
     private float x;
     private float y;
     private float r;
     private boolean fallsIntoArea;
 
-    public ResultModel(float x, float y, float r, boolean fallsIntoArea) {
+    private String time;
+
+    public ResultModel(float x, float y, float r, boolean fallsIntoArea, String time) {
         this.x = x;
         this.y = y;
         this.r = r;
         this.fallsIntoArea = fallsIntoArea;
+        this.time = time;
     }
 
     public float getX() {
@@ -43,5 +49,13 @@ public class ResultModel {
 
     public void setFallsIntoArea(boolean fallsIntoArea) {
         this.fallsIntoArea = fallsIntoArea;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

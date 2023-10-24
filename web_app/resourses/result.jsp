@@ -58,6 +58,7 @@
                     <th>X</th>
                     <th>Y</th>
                     <th>Результат</th>
+                    <th>Время</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,6 +67,7 @@
                     <td>${resultModel.x}</td>
                     <td>${resultModel.y}</td>
                     <td>${resultModel.fallsIntoArea}</td>
+                    <td>${resultModel.time}</td>
                 </tr>
             </tbody>
         </table>

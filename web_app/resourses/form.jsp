@@ -11,11 +11,18 @@
     <style type="text/css">
         #svg{
             margin-top: 5%;
-            margin-right: 70px;
-            width: 420px;
-            height: 500px;
+            margin-right: 170px;
+            border: 2px solid #703535;
+            width: 390px;
+            height: 390px;
             display: inline-block;
+            padding: 10px;
         }
+
+        #svg svg {
+
+        }
+
         body {
             background-color: #703535;
         }
@@ -24,7 +31,7 @@
             background-color: white;
             padding: 3%;
             margin: 5% auto;
-            width: 50%;
+            width: 60%;
             font-family: "Arial", sans-serif;
             font-size: 18px;
             color: #5c5c5c;
@@ -122,6 +129,7 @@
             <th>X</th>
             <th>Y</th>
             <th>Результат</th>
+            <th>Время</th>
         </tr>
         </thead>
         <tbody>
@@ -131,6 +139,7 @@
                 <td>${result.x}</td>
                 <td>${result.y}</td>
                 <td>${result.fallsIntoArea}</td>
+                <td>${result.time}</td>
             </tr>
         </c:forEach>
         </tbody>
@@ -143,11 +152,11 @@
         <div>
             <label for="field_x1">Параметр X {-5, ..., 3}</label><br>
             <input checked type="radio" id="field_x1" class="field_x" name="x" value="-5" onchange="handleRadioChange();"><label for="field_x1">-5</label><br>
-            <input type="radio" id="field_x2" class="field_x" name="x" value="-4" onchange="handleRadioChange();"><label for="fielx_x2">-4</label><br>
+            <input type="radio" id="field_x2" class="field_x" name="x" value="-4" onchange="handleRadioChange();"><label for="field_x2">-4</label><br>
             <input type="radio" id="field_x3" class="field_x" name="x" value="-3" onchange="handleRadioChange();"><label for="field_x3">-3</label><br>
-            <input type="radio" id="field_x4" class="field_x" name="x" value="-2" onchange="handleRadioChange();"><label for="fielx_x4">-2</label><br>
+            <input type="radio" id="field_x4" class="field_x" name="x" value="-2" onchange="handleRadioChange();"><label for="field_x4">-2</label><br>
             <input type="radio" id="field_x5" class="field_x" name="x" value="-1" onchange="handleRadioChange();"><label for="field_x5">-1</label><br>
-            <input type="radio" id="field_x6" class="field_x" name="x" value="0" onchange="handleRadioChange();"><label for="field_x6"> 0</label><br>
+            <input checked type="radio" id="field_x6" class="field_x" name="x" value="0" onchange="handleRadioChange();"><label for="field_x6"> 0</label><br>
             <input type="radio" id="field_x7" class="field_x" name="x" value="1" onchange="handleRadioChange();"><label for="field_x7"> 1</label><br>
             <input type="radio" id="field_x8" class="field_x" name="x" value="2" onchange="handleRadioChange();"><label for="field_x8"> 2</label><br>
             <input type="radio" id="field_x9" class="field_x" name="x" value="3" onchange="handleRadioChange();"><label for="field_x9"> 3</label><br>
@@ -161,7 +170,7 @@
             <label for="field_r">Параметр R [2; 5]</label><br>
             <input id="field_r" type="text" name="r">
         </div>
-        <input disabled id="send" type="submit" value="Рассчитать">
+        <input id="send" type="submit" value="Рассчитать">
     </form>
 </div>
 </body>
@@ -169,7 +178,7 @@
 <script>
     R = 150
     cntr = 190
-    let draw = SVG().addTo('#svg').size(500, 500)
+    let draw = SVG().addTo('#svg').size(390, 390)
     var circle = draw.circle()
     circle.radius(R).center(cntr, cntr).fill('#55a6e7')
 
@@ -193,7 +202,7 @@
     var textY = draw.text("Y").attr({x:cntr+10, y: 15})
 
 
-    var svgElement = document.getElementById('svg')
+    var svgElement = document.querySelector('#svg')
     var fieldR = document.getElementById('field_r')
     var fieldY = document.getElementById('field_y')
     var fieldX = document.querySelector('input[name="x"]:checked')
@@ -201,12 +210,13 @@
     var submitE = document.getElementById("send");
     var isUserPointStaged = false;
     function sendUserPoint(event) {
+        fieldX = document.querySelector('input[name="x"]:checked')
         if(!(isValid(fieldR.value) && fieldR.value !== '' &&  fieldR.value>=2 && fieldR.value<=5)){
-            alert('Пожалуйста, введите параметр R')
+            alert('Пожалуйста, введите параметр R корректно!')
             return
         }
-        offsetTop = svgElement.offsetTop-window.scrollY
-        offsetLeft = svgElement.offsetLeft
+        offsetTop = svgElement.offsetTop-window.scrollY+12
+        offsetLeft = svgElement.offsetLeft+12
         x = event.clientX-offsetLeft-cntr
         y = cntr-event.clientY+offsetTop
         fieldX.value = Math.round(x/R*fieldR.value*100)/100
@@ -216,9 +226,9 @@
         }
         drawPoint(x, y, 1)
         isUserPointStaged = true;
+
         form.submit()
     }
-
 
 
     function drawPoint(x, y, r){
@@ -285,11 +295,27 @@
         if ((isValid(fieldY.value) && fieldY.value>=-5 && fieldY.value<=3) &&
             isValid(fieldR.value) && fieldR.value !== '' &&  fieldR.value>=2 && fieldR.value<=5 &&
             isValid(fieldX.value)) {
-            submitE.disabled = false;
+            //submitE.disabled = false;
         } else {
-            submitE.disabled = true;
+            //submitE.disabled = true;
         }
     }
+
+    submitE.addEventListener('click', function (e){
+        e.preventDefault();
+        check = true;
+        if (!(isValid(fieldY.value) && fieldY.value>=-5 && fieldY.value<=3)){
+            check = false
+            alert("Пожалуйста, введите параметр Y корректно!")
+        }
+        if(!(isValid(fieldR.value) && fieldR.value !== '' &&  fieldR.value>=2 && fieldR.value<=5)){
+            check = false
+            alert("Пожалуйста, введите параметр R корректно!")
+        }
+        if(check)
+            form.submit();
+
+    });
 </script>
 
 </html>
