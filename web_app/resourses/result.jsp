@@ -49,7 +49,7 @@
 </head>
 <body>
     <div class="wrapper">
-        <a href="./">Назад</a>
+        <a href=". /">Назад</a>
         <h2>Результат последнего вычисления:</h2>
         <table>
             <thead>

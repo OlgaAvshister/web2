@@ -317,5 +317,11 @@
 
     });
 </script>
-
+<script>
+        <% String error = (String) request.getAttribute("error"); %>
+        error = "<%= error%>";
+        if (error == "1"){
+        alert("Неверные параметры!");
+        }
+</script>
 </html>

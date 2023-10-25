@@ -25,25 +25,24 @@ public final class AreaCheckServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response)
             throws IOException, ServletException {
+            float r = Float.parseFloat((String) request.getAttribute("R"));
+            float x = Float.parseFloat((String) request.getAttribute("X"));
+            float y = Float.parseFloat((String) request.getAttribute("Y"));
+            LocalDateTime time = LocalDateTime.now();
 
-        float r = Float.parseFloat((String) request.getAttribute("R"));
-        float x = Float.parseFloat((String) request.getAttribute("X"));
-        float y = Float.parseFloat((String) request.getAttribute("Y"));
-        LocalDateTime time = LocalDateTime.now();
+            boolean fallsIntoArea = fallsIntoArea(x, y, r);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
+            ResultModel resultModel = new ResultModel(x, y, r, fallsIntoArea, time.format(formatter));
+            ResultsBean resultsBean = (ResultsBean) request.getAttribute("resultsBean");
+            resultsBean.setResultToList(resultModel);
+            request.setAttribute("resultModel", resultModel);
 
-        boolean fallsIntoArea = fallsIntoArea(x, y, r);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
-        ResultModel resultModel = new ResultModel(x, y, r, fallsIntoArea, time.format(formatter));
-        ResultsBean resultsBean = (ResultsBean) request.getAttribute("resultsBean");
-        resultsBean.setResultToList(resultModel);
-        request.setAttribute("resultModel", resultModel);
-
-        getServletContext().getRequestDispatcher("/resources/result.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher("/resources/result.jsp").forward(request, response);
     }
 
     private boolean fallsIntoArea(float x, float y, float r) {
-        boolean fitsIntoFirst = y >= 0 && x >= 0 && y <= r/2 - x;
-        boolean fitsIntoSecond = x <= 0 && y >= 0 && x >= -r/2 && y <= r;
+        boolean fitsIntoFirst = y >= 0 && x >= 0 && y <= r / 2 - x;
+        boolean fitsIntoSecond = x <= 0 && y >= 0 && x >= -r / 2 && y <= r;
         boolean fitsIntoThird = y <= 0 && x <= 0 && Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) <= r;
 
         return fitsIntoFirst || fitsIntoSecond || fitsIntoThird;
